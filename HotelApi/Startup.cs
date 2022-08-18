@@ -1,6 +1,7 @@
 ﻿using HotelApi;
-
+using HotelApi.Repositories;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,5 +20,9 @@ public class Startup : FunctionsStartup {
 			.AddJsonFile("local.settings.json")
 			.AddEnvironmentVariables()
 			.Build();
+		var services = builder.Services;
+		services.AddDbContext<HotelDbContext>(options =>
+			options.UseSqlServer(config.GetConnectionString("HotelDb")));
+		services.AddScoped<HotelRepo>();
 	}
 }

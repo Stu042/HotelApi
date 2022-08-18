@@ -71,6 +71,7 @@ Find available rooms between two dates for a given number of people
 - Each hotel has 6 rooms (fixed)
 - Room types: single, double, deluxe
     - Assume capacity of 1 person, 2 people and 2+ people - but no mention of capacity so leave as an option
+    - "Hotels have 3 room types: single, double, deluxe", does this mean every hotel has at least one of each type?
 - Guests not allowed to change rooms within a booking
     - booking must be full duration in same room
 - Booking ref **number** must be unique - based on hotel and (booking count)1
@@ -81,13 +82,14 @@ Find available rooms between two dates for a given number of people
 ### Endpoints
 
 - Find a hotel based on its name
-    - FindHotel
+    - Endpoint: FindHotel
     - input
         - string name
     - return
         - hotels uint id
 - Find available rooms between two dates for a given number of people
-    - Note, no requirement for how people are grouped in rooms
+    - Endpoint: FindRoom
+    - Note, no requirement for how people are grouped in rooms, **assuming** its a group that will fit into one room.
     - input
         - uint peopleCount
         - date from
@@ -97,6 +99,7 @@ Find available rooms between two dates for a given number of people
             - hotel id
             - collection of room numbers
 - Book Room
+    - Endpoint: BookRoom
     - input
         - hotel id
         - room number
@@ -106,6 +109,7 @@ Find available rooms between two dates for a given number of people
         - success or fail
         - booking ref number
 - Find booking details based on booking ref number
+    - Endpoint: FindBooking
     - input
         - booking ref number
     - output
@@ -117,28 +121,24 @@ Find available rooms between two dates for a given number of people
         - collection of room numbers
 
 ---
+
 ### Data
 
 #### Hotel
 
 - id (hotel id) - unique
 - name - unique vartext
-- fk to room1 - unique
-- fk to room2 - unique
-- fk to room3 - unique
-- fk to room4 - unique
-- fk to room5 - unique
-- fk to room6 - unique
 
 #### Room
 
-- id - unique uint32
+- id - unique int32
 - type string
-- capacity uint32
+- capacity int32
+- hotel
 
 #### Booking
 
-- id - unique uint64
+- id - unique int64
 - booking ref (replicated in table) uint64
 - Room id
 - date from

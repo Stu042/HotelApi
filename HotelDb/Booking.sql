@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Booking]
+(
+	[Id] BIGINT  NOT NULL PRIMARY KEY,
+	[Ref] BIGINT NOT NULL,
+	[RoomId] INT NOT NULL REFERENCES Room(Id),
+	[Visitor] INT NOT NULL,
+	[From] DATE NOT NULL,
+	[To] DATE NOT NULL
+)

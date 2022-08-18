@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace HotelApi.Models.Response {
-	public class FindHotelResponse {
-		[JsonProperty("name")]
-		public string Name { get; set; }
+	public class ErrorResponse {
 		[JsonProperty("message")]
 		public string Message { get; set; }
 	}
