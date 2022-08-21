@@ -48,7 +48,7 @@ public class Hotel {
 			return new BadRequestObjectResult(new ErrorResponse { Message = request.Message });
 		}
 		var hotel = _hotelRepo.FetchHotel(request.Name);
-		if (hotel == default) {
+		if (hotel == null) {
 			return new NotFoundObjectResult(new ErrorResponse { Message = $"Unable to find hotel named: {request.Name}" });
 		}
 		_log.LogDebug($"Found Hotel, ID: {hotel.Id}, Name: {hotel.Name}");

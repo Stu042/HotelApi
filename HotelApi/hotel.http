@@ -4,9 +4,15 @@
 @azure = https://hotelam.azure-api.net/hotelfa
 
 
+############ Local
 ###
 GET {{local}}/FindHotel?name=Hotel Manyana
 
+###	Should fail
+GET {{local}}/FindHotel?name=Hotel Not In My Database
+
+
+############ Azure
 ###
 GET {{azure}}/FindHotel?name=Hotel Manyana
 
@@ -14,6 +20,8 @@ GET {{azure}}/FindHotel?name=Hotel Manyana
 GET {{azure}}/FindHotel?name=Hotel Not In My Database
 
 
+
+############ Local
 ### Free space
 GET {{local}}/AvailableRooms?fromYear=2022&fromMonth=2&fromDay=5&toYear=2022&toMonth=2&toDay=10&guestCount=2
 
@@ -34,10 +42,23 @@ GET {{local}}/AvailableRooms?fromYear=2022&fromMonth=4&fromDay=21&toYear=2022&to
 
 
 
-
-###
+############ Azure
+### Free space
 GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=2&fromDay=5&toYear=2022&toMonth=2&toDay=10&guestCount=2
 
-###	Should return less rooms than previous example
+### Just free space, ends at start of booking 1
+GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=3&fromDay=25&toYear=2022&toMonth=4&toDay=1&guestCount=2
+
+### Just free space, starts at end of booking 2
+GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=4&fromDay=22&toYear=2022&toMonth=4&toDay=30&guestCount=2
+
+###	Overlaps booking 1
 GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=4&fromDay=5&toYear=2022&toMonth=4&toDay=10&guestCount=2
+
+###	Overlaps start of booking 1
+GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=3&fromDay=25&toYear=2022&toMonth=4&toDay=2&guestCount=2
+
+###	Overlaps end of booking 2
+GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=4&fromDay=21&toYear=2022&toMonth=4&toDay=30&guestCount=2
+
 

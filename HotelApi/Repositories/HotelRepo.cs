@@ -27,20 +27,23 @@ public class HotelRepo : IHotelRepo {
 		name = name.ToLower();
 		using (var context = _contextFactory.CreateDbContext()) {
 			var hotel = context.Hotel.Where(hotel => hotel.Name.ToLower() == name).FirstOrDefault();
-			var rooms = context.Room.Where(room => room.HotelId == hotel.Id)
-						.Select(room => new RoomModel {
-							Id = room.Id,
-							Capacity = room.Capacity,
-							HotelId = room.HotelId,
-							Number = room.Number,
-							Style = room.Style
-						}).ToArray();
-			return new HotelModel {
-				Id = hotel.Id,
-				Name = name,
-				Rooms = rooms
-			};
+			if (hotel != default) {
+				var rooms = context.Room.Where(room => room.HotelId == hotel.Id)
+							.Select(room => new RoomModel {
+								Id = room.Id,
+								Capacity = room.Capacity,
+								HotelId = room.HotelId,
+								Number = room.Number,
+								Style = room.Style
+							}).ToArray();
+				return new HotelModel {
+					Id = hotel.Id,
+					Name = hotel.Name,
+					Rooms = rooms
+				};
+			}
 		}
+		return null;
 	}
 
 	public RoomModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount) {
