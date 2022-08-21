@@ -47,13 +47,8 @@ public class HotelRepo : IHotelRepo {
 	}
 
 	public RoomModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount) {
-		if (from == to) {
+		if (from >= to) {
 			return Array.Empty<RoomModel>();
-		}
-		if (from > to) {
-			var temp = to;
-			to = from;
-			from = temp;
 		}
 		using (var context = _contextFactory.CreateDbContext()) {
 			var bookingsInRange = context.Booking.Where(b => !(to <= b.From || from >= b.To)).Select(booking => booking.RoomId);
