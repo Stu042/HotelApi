@@ -70,7 +70,7 @@ Also regarding date ranges ensure to check To date is after From date.
 - Id (hotel id) - unique
 - Name - unique vartext
 
-Indexed bY Id and Name.
+Indexed by Id and Name.
 
 ## Room
 
