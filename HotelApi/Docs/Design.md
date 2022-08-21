@@ -67,22 +67,27 @@ Also regarding date ranges ensure to check To date is after From date.
 
 ## Hotel
 
-- id (hotel id) - unique
-- name - unique vartext
+- Id (hotel id) - unique
+- Name - unique vartext
+
+Indexed bY Id and Name.
 
 ## Room
 
-- id - unique int32
+- Id - unique int32
 - Number int32
-- type string
-- capacity int32
-- hotelId
+- Type string
+- Capacity int32
+- HotelId
+
+Indexed by HotelId and Capacity.
 
 ## Booking
 
-- id - unique int64
-- booking ref (replicated in table) uint64
+- Id - unique int64
+- Booking ref (replicated in table) uint64
 - Room id
-- date from
-- date to
+- Date from
+- Date to
 
+Indexed by Id, From and To dates.
