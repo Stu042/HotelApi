@@ -39,7 +39,7 @@ namespace Hotel.Tests {
 						HotelId = 1,
 						Id = 1,
 						Number = 1,
-						Type = "Single"
+						Style = "Single"
 					}
 				}
 			};

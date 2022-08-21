@@ -59,7 +59,7 @@ public class Hotel {
 				Id = room.Id,
 				Number = room.Number,
 				Capacity = room.Capacity,
-				Style = room.Type
+				Style = room.Style
 			}).ToArray()
 		};
 		return new OkObjectResult(respsonse);
@@ -114,7 +114,7 @@ public class Hotel {
 		var availRooms = availRoomModels.Select(ar => new AvailableRoomsResponse {
 			RoomId = ar.Id,
 			HotelName = _hotelRepo.FetchHotelName(ar.HotelId),	// gotta be a nicer way to do this
-			Style = ar.Type,
+			Style = ar.Style,
 			Capacity = ar.Capacity
 		}).ToArray();
 		return new OkObjectResult(availRooms);

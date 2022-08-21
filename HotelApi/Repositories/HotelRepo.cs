@@ -33,7 +33,7 @@ public class HotelRepo : IHotelRepo {
 							Capacity = room.Capacity,
 							HotelId = room.HotelId,
 							Number = room.Number,
-							Type = room.Type
+							Style = room.Style
 						}).ToArray();
 			return new HotelModel {
 				Id = hotel.Id,
@@ -52,7 +52,7 @@ public class HotelRepo : IHotelRepo {
 								Capacity = room.Capacity,
 								HotelId = room.HotelId,
 								Number = room.Number,
-								Type = room.Type
+								Style = room.Style
 							}).ToArray();
 			return freeRooms;
 		}
@@ -95,7 +95,7 @@ public class HotelRepo : IHotelRepo {
 			Capacity = model.Capacity,
 			HotelId = model.HotelId,
 			Number = model.Number,
-			Type = model.Type
+			Style = model.Style
 		};
 		using (var context = _contextFactory.CreateDbContext()) {
 			context.Room.Add(row);
