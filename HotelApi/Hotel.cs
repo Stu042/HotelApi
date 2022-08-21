@@ -27,11 +27,11 @@ public class Hotel {
 	const string AVAIL_ROOM_PARAMETER_TO_DAY = "toDay";
 	const string AVAIL_ROOM_PARAMETER_GUEST_COUNT = "guestCount";
 
-	private readonly HotelRepo _hotelRepo;
-	private readonly ILogger _log;
+	private readonly IHotelRepo _hotelRepo;
+	private readonly ILogger<Hotel> _log;
 
 
-	public Hotel(HotelRepo hotelRepo, ILogger log) {
+	public Hotel(IHotelRepo hotelRepo, ILogger<Hotel> log) {
 		_hotelRepo = hotelRepo;
 		_log = log;
 	}
@@ -53,10 +53,18 @@ public class Hotel {
 		}
 		_log.LogDebug($"Found Hotel, ID: {hotel.Id}, Name: {hotel.Name}");
 		var respsonse = new FindHotelResponse {
-			Name = hotel.Name
+			Id = hotel.Id,
+			Name = hotel.Name,
+			Rooms = hotel.Rooms.Select(room => new FindHotelRoom {
+				Id = room.Id,
+				Number = room.Number,
+				Capacity = room.Capacity,
+				Style = room.Type
+			}).ToArray()
 		};
 		return new OkObjectResult(respsonse);
 	}
+
 
 	private FindHotelRequest ParseFindHotelRequest(HttpRequest req) {
 		FindHotelRequest result;
@@ -91,12 +99,21 @@ public class Hotel {
 		if (!string.IsNullOrWhiteSpace(request.Message)) {
 			return new BadRequestObjectResult(new ErrorResponse { Message = request.Message });
 		}
+		if (request.From >= request.To) {
+			_log.LogError("Dates are invalid, 'to' date must be later than 'from' date.");
+			return new BadRequestObjectResult(new ErrorResponse { Message = "Dates are invalid, 'to' date needs to be after 'from' date." });
+		}
+		var maxCapacity = _hotelRepo.FetchRoomsMaxCapacity();
+		if (request.GuestCount > maxCapacity) {
+			return new NotFoundObjectResult(new ErrorResponse { Message = $"No rooms have a capacity over {maxCapacity}." });
+		}
 		var availRoomModels = _hotelRepo.FetchAvailableRooms(request.From, request.To, request.GuestCount);
-		if (availRoomModels.Length == 0) {
+		if (availRoomModels.Count() == 0) {
 			return new NotFoundObjectResult(new ErrorResponse { Message = "Unable to find any rooms for those dates at that capacity." });
 		}
 		var availRooms = availRoomModels.Select(ar => new AvailableRoomsResponse {
-			HotelName = _hotelRepo.FetchHotelName(ar.Hotel),	// gotta be a nicer way to do this
+			RoomId = ar.Id,
+			HotelName = _hotelRepo.FetchHotelName(ar.HotelId),	// gotta be a nicer way to do this
 			Style = ar.Type,
 			Capacity = ar.Capacity
 		}).ToArray();
@@ -109,11 +126,12 @@ public class Hotel {
 		if (req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_FROM_YEAR) &&
 			req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_FROM_MONTH) &&
 			req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_FROM_DAY)) {
-			var from = ParseDateOnly(req.Query[AVAIL_ROOM_PARAMETER_FROM_YEAR], req.Query[AVAIL_ROOM_PARAMETER_FROM_MONTH], req.Query[AVAIL_ROOM_PARAMETER_FROM_DAY]);
+			var from = ParseDate(req.Query[AVAIL_ROOM_PARAMETER_FROM_YEAR], req.Query[AVAIL_ROOM_PARAMETER_FROM_MONTH], req.Query[AVAIL_ROOM_PARAMETER_FROM_DAY]);
 			if (from != null) {
 				result.From = (DateTime)from;
 			}
-		} else {
+		}
+		if (result.From == default) {
 			_log.LogError("Unable to parse From date.");
 			result.Message = "Unable to parse 'from' date.";
 			return result;
@@ -121,11 +139,12 @@ public class Hotel {
 		if (req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_TO_YEAR) &&
 			req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_TO_MONTH) &&
 			req.Query.ContainsKey(AVAIL_ROOM_PARAMETER_TO_DAY)) {
-			var to = ParseDateOnly(req.Query[AVAIL_ROOM_PARAMETER_TO_YEAR], req.Query[AVAIL_ROOM_PARAMETER_TO_MONTH], req.Query[AVAIL_ROOM_PARAMETER_TO_DAY]);
+			var to = ParseDate(req.Query[AVAIL_ROOM_PARAMETER_TO_YEAR], req.Query[AVAIL_ROOM_PARAMETER_TO_MONTH], req.Query[AVAIL_ROOM_PARAMETER_TO_DAY]);
 			if (to != null) {
 				result.To = (DateTime)to;
 			}
-		} else {
+		}
+		if (result.To == default) {
 			_log.LogError("Unable to parse To date.");
 			result.Message = "Unable to parse 'to' date.";
 			return result;
@@ -142,7 +161,7 @@ public class Hotel {
 		return result;
 	}
 
-	private DateTime? ParseDateOnly(string year, string month, string day) {
+	private DateTime? ParseDate(string year, string month, string day) {
 		try {
 			int yearInt = int.Parse(year);
 			int monthInt = int.Parse(month);

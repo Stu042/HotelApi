@@ -2,6 +2,8 @@
 
 namespace HotelApi.Models.Response {
 	public class AvailableRoomsResponse {
+		[JsonProperty("roomId")]
+		public int RoomId { get; set; }
 		[JsonProperty("hotelName")]
 		public string HotelName { get; set; }
 		[JsonProperty("style")]
@@ -9,5 +11,4 @@ namespace HotelApi.Models.Response {
 		[JsonProperty("capacity")]
 		public int Capacity { get; set; }
 	}
-
 }

@@ -3,5 +3,6 @@
 	[Id] INT NOT NULL PRIMARY KEY, 
     [Type] NVARCHAR(50) NOT NULL, 
     [Capacity] INT NOT NULL,
-    [Hotel] INT NOT NULL REFERENCES Hotel(Id)
+    [HotelId] INT NOT NULL REFERENCES Hotel(Id), 
+    [Number] INT NOT NULL
 )

@@ -17,12 +17,12 @@ public class Startup : FunctionsStartup {
 		var currentDirectory = executionContextOptions.AppDirectory;
 		var config = new ConfigurationBuilder()
 			.SetBasePath(currentDirectory)
-			.AddJsonFile("local.settings.json")
+			.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
 			.AddEnvironmentVariables()
 			.Build();
 		var services = builder.Services;
-		services.AddDbContext<HotelDbContext>(options =>
+		services.AddDbContextFactory<HotelDbContext>(options =>
 			options.UseSqlServer(config.GetConnectionString("HotelDb")));
-		services.AddScoped<HotelRepo>();
+		services.AddScoped<IHotelRepo, HotelRepo>();
 	}
 }

@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "apis1": {
+      "apiEndpoint": "https://hotelam.azure-api.net/hotelfa",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/hotelam/apis/hotelfa",
+      "type": "apis.azure"
+    },
+    "storage1": {
+      "ignored": "true",
+      "type": "storage",
+      "connectionId": "AzureWebJobsStorage"
+    }
+  }
+}
