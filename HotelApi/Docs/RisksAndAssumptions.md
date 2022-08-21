@@ -17,7 +17,7 @@
 
 Find a hotel based on its name.
 
-- No mention of what to return, quck converstion from Name to Id? Or full information required?
+- No mention of what to return, quck convertion from Name to Id? Or full information required?
     - Probably most information; name, rooms not bookings as could be many.
 - Case sensitive or insensitive search?
 
@@ -32,6 +32,8 @@ Find available rooms between two dates for a given number of people.
 - Searching all rooms in all hotels.
 - Hotels can usually turn a room over on the same day, check out in the morning book in same afternoon/evening.
     - So "from" date can be same date the room is last used and "to" date can be same date a future booking will start.
+- Dates must be in order, i.e. 'from' is before 'to'.
+- A date of one day i.e. from 10th to 10th wont work, guests would need to stay for a night.
 
 ### Endpoint: BookRoom
 
@@ -39,7 +41,10 @@ Book a room for a number of guests.
 
 - For a booking, guests must stay in one room for full duration.
 - No matter how we call this the room could of been taken, even in the short duration between calls.
-    - so lock db - this rooms row, check availability and book if available, else return a room not available error.
+    - so lock this rooms db row?, check availability and book if available else return a room not available error.
+    - Would be better to have this part of db design.
+- Dates must be in order, i.e. 'from' is before 'to'.
+- A date of one day i.e. from 10th to 10th wont work, guests would need to stay for a night.
 
 ### BookingDetails
 
@@ -52,5 +57,7 @@ Find booking details based on booking ref number.
 
 ## Issues with Data
 
-Currently we don't enforce maximum of six rooms per hotel.
-Id's should all be unique with auto increment.
+- Currently we don't enforce maximum of six rooms per hotel.
+    - We could ensure room numbers are >=1 and <=6 and ensure no duplicates.
+- Id's should use auto increment.
+- Whenever using date ranges, we must enforce order, 'from' is before 'to'.

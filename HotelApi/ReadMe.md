@@ -1,1 +1,1 @@
-﻿All douments and notes are in the Docs folder.
+﻿All douments and notes are in the HotelApi projects Docs folder.
