@@ -67,14 +67,14 @@ Also regarding date ranges ensure to check To date is after From date.
 
 ## Hotel
 
-- Id (hotel id) - unique
+- Id (hotel id) - PK, unique
 - Name - unique vartext
 
 Indexed by Id and Name.
 
 ## Room
 
-- Id - unique int32
+- Id - PK, unique int32
 - Number int32
 - Type string
 - Capacity int32
@@ -84,7 +84,7 @@ Indexed by HotelId and Capacity.
 
 ## Booking
 
-- Id - unique int64
+- Id - PK, unique int64
 - Booking ref - unique int64
 - Room id
 - Date from
