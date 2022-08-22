@@ -85,7 +85,7 @@ Indexed by HotelId and Capacity.
 ## Booking
 
 - Id - unique int64
-- Booking ref (replicated in table) uint64
+- Booking ref - unique int64
 - Room id
 - Date from
 - Date to
