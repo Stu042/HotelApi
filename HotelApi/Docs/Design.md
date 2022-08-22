@@ -90,4 +90,4 @@ Indexed by HotelId and Capacity.
 - Date from
 - Date to
 
-Indexed by Id, From and To dates.
+Indexed by Booking ref, From and To dates.
