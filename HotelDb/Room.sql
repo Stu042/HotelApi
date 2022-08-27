@@ -6,3 +6,11 @@
     [HotelId] INT NOT NULL REFERENCES Hotel(Id), 
     [Number] INT NOT NULL
 )
+
+GO
+CREATE NONCLUSTERED INDEX [RoomCapacity]
+    ON [dbo].[Room] ([Capacity]);
+GO
+CREATE NONCLUSTERED INDEX [RoomHotelId]
+    ON [dbo].[Room] (HotelId);
+GO

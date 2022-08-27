@@ -62,3 +62,7 @@ GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=3&fromDay=25&toYear=2022&to
 GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=4&fromDay=21&toYear=2022&toMonth=4&toDay=30&guestCount=2
 
 
+###	Overlaps end of booking 2
+GET {{azure}}/AvailableRooms?fromYear=2022&fromMonth=5&fromDay=21&toYear=2022&toMonth=4&toDay=30&guestCount=2
+
+

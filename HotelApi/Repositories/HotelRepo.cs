@@ -46,23 +46,33 @@ public class HotelRepo : IHotelRepo {
 		return null;
 	}
 
-	public RoomModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount) {
+	public RoomAndHotelNameModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount) {
 		if (from >= to) {
-			return Array.Empty<RoomModel>();
+			return Array.Empty<RoomAndHotelNameModel>();
 		}
-		using (var context = _contextFactory.CreateDbContext()) {
-			var bookingsInRange = context.Booking.Where(b => !(to <= b.From || from >= b.To)).Select(booking => booking.RoomId);
-			var freeRooms = context.Room.Where(r => r.Capacity >= guestCount && !bookingsInRange.Contains(r.Id))
-							.Select(room => new RoomModel {
-								Id = room.Id,
-								Capacity = room.Capacity,
-								HotelId = room.HotelId,
-								Number = room.Number,
-								Style = room.Style
-							}).ToArray();
-			return freeRooms;
+		using var context = _contextFactory.CreateDbContext();
+		using var context2 = _contextFactory.CreateDbContext();
+		var bookingsInRange = context.Booking.Where(b => !(to <= b.From || from >= b.To)).Select(booking => booking.RoomId).ToArray();
+		var allPossibleRoomsQuery = from room in context.Room.AsEnumerable()
+					join hotel in context2.Hotel on room.HotelId equals hotel.Id
+					where room.Capacity >= guestCount
+					select new RoomAndHotelNameModel {
+						Id = room.Id,
+						Capacity = room.Capacity,
+						HotelName = hotel.Name,
+						HotelId = room.HotelId,
+						Number = room.Number,
+						Style = room.Style
+					};
+		var result = new List<RoomAndHotelNameModel>(allPossibleRoomsQuery.Count());
+		foreach (var room in allPossibleRoomsQuery) {
+			if (!bookingsInRange.Contains(room.Id)) {
+				result.Add(room);
+			}
 		}
+		return result.ToArray();
 	}
+
 
 	public int FetchRoomsMaxCapacity() {
 		using (var context = _contextFactory.CreateDbContext()) {

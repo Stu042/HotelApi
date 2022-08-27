@@ -67,12 +67,12 @@ Also regarding date ranges ensure to check To date is after From date.
 
 ## Hotel
 
-- id (hotel id) - unique
+- id (hotel id) - Primary
 - name - unique vartext
 
 ## Room
 
-- id - unique int32
+- id - Primary int32
 - Number int32
 - type string
 - capacity int32
@@ -80,9 +80,19 @@ Also regarding date ranges ensure to check To date is after From date.
 
 ## Booking
 
-- id - unique int64
+- id - Primary int64
 - booking ref (replicated in table) uint64
 - Room id
 - date from
 - date to
 
+## Indexing
+
+### Room
+
+- capacity
+
+### Booking
+
+- date from
+- date to

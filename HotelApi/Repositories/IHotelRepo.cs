@@ -7,7 +7,7 @@ namespace HotelApi.Repositories;
 public interface IHotelRepo {
 	string FetchHotelName(int id);
 	HotelModel FetchHotel(string name);
-	RoomModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount);
+	RoomAndHotelNameModel[] FetchAvailableRooms(DateTime from, DateTime to, int guestCount);
 	int FetchRoomsMaxCapacity();
 	BookingModel FetchBooking(long bookingRef);
 	void SaveHotel(HotelModel model);

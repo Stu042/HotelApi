@@ -113,7 +113,7 @@ public class Hotel {
 		}
 		var availRooms = availRoomModels.Select(ar => new AvailableRoomsResponse {
 			RoomId = ar.Id,
-			HotelName = _hotelRepo.FetchHotelName(ar.HotelId),	// gotta be a nicer way to do this
+			HotelName = ar.HotelName,
 			Style = ar.Style,
 			Capacity = ar.Capacity
 		}).ToArray();

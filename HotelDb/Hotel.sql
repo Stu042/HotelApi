@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Hotel]
 (
 	[Id] INT NOT NULL PRIMARY KEY,
-	[Name] VARCHAR(50) NOT NULL, 
+	[Name] VARCHAR(50) UNIQUE NOT NULL, 
 )
